@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "json.hpp"
 #include "httplib.h"
 
@@ -11,7 +12,13 @@ void SendCommand(httplib::Client& client, const json& msg) {
     if (res && res->status == 200) {
         std::cout << "Server response: " << res->body << "\n";
         json answer = json::parse(res->body);
-        std::cout << answer["res"] << "\n";
+        if (answer.contains("res")) {
+            std::cout << "response: " + std::string(answer["res"]) << "\n";
+        } else if (answer.contains("err")) {
+            std::cout << "error: " + std::string(answer["err"]) << "\n";
+        } else {
+            std::cout << "empty response" << "\n";
+        }
 
     } else {
         std::cerr << "Failed to send message or receive response." << std::endl;
@@ -25,12 +32,13 @@ int main(int argc, char* argv[]) {
     }
 
     if (args.size() < 3) {
-        std::cout << "not enough arguments in command";
+        std::cout << "not enough arguments in command\n";
         return 0;
     }
 
-    httplib::Client client("http://0.0.0.0:8080");
+    args[2].erase(std::remove(args[2].begin(), args[2].end(), ' '), args[2].end());
 
+    httplib::Client client("http://0.0.0.0:8080");
     json msg;
     if (args[1] == "-c") {
         msg["cmd"] = args[2];
@@ -40,13 +48,3 @@ int main(int argc, char* argv[]) {
     SendCommand(client, msg);
     return 0;
 }
-
-// json j;
-// j["name"] = "John";
-// auto json_str = j.dump(0);
-
-// json s = json::parse(json_str);
-// std::string result = s["name"];
-// std::cout << result + '\n';
-
-// std::cout << EvaluateExpression("(2+3)*(4+5*1234)")<< "\n";
