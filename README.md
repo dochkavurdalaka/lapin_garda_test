@@ -94,7 +94,7 @@
    ```bash
    ./Client -e "-5*6 + (-7)*2 + 1"
    ```
-   ![image](https://github.com/user-attachments/assets/717db81c-4626-4d87-a106-f86c437f463a)
+   ![image](https://github.com/user-attachments/assets/071e3b1c-54c3-450a-872a-317c5977e150)
 
 3. Команда вычисления выражения с плавающей запятой:
    ```bash
