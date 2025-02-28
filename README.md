@@ -52,4 +52,8 @@
 1. Клонируйте репозиторий:
    ```bash
    git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
-   cd lapin_garda_test```
+   cd lapin_garda_test
+2. Соберите образ докера и запустите контейнер:
+   ```bash
+   docker build -t lapin_garda_test .
+   docker run -p 8080:8080 -it --name lapin_garda_test lapin_garda_test
