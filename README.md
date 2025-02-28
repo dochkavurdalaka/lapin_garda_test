@@ -81,7 +81,8 @@
 В этом разделе нужно описывать, как правильно взаимодействовать с программой.
 После запуска сервера должно появиться следующее сообщение:
 
-   ![image](https://github.com/user-attachments/assets/4427f191-d5c8-4886-a2ef-3067c312806c)
+   ![image](![image](https://github.com/user-attachments/assets/1f9ccd82-d592-4c6a-b9e6-faa9d6d53fbc)
+)
 1. Команда **`echo`**:
    ```bash
    ./Client -c "echo"
@@ -93,7 +94,7 @@
    ```bash
    ./Client -e "-5*6 + (-7)*2 + 1"
    ```
-   ![image](https://github.com/user-attachments/assets/b24c588d-a5ef-4ed0-96cb-cd14844aa9f7)
+   ![image](https://github.com/user-attachments/assets/717db81c-4626-4d87-a106-f86c437f463a)
 
 3. Команда вычисления выражения с плавающей запятой:
    ```bash
