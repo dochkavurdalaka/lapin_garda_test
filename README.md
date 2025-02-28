@@ -71,3 +71,15 @@
    ```bash
    ./Server
    ./Client
+
+---
+
+## Использование программы
+В этом разделе нужно описывать, как правильно взаимодействовать с программой.
+После запуска сервера должно появиться следующее сообщение:
+1. Команда **`echo`**:
+   ```bash
+   git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
+   
+![image](https://github.com/user-attachments/assets/4f610f74-9ed1-480c-ba7d-d8ef5607fd9e)
+
