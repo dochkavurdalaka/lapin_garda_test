@@ -155,3 +155,9 @@
 
 ---
 
+## Контакты
+
+Если у вас возникнут вопросы, вы можете связаться со мной:
+
+- **Telegram**: [@dochkavurdalaka](https://t.me/dochkavurdalaka)
+- **Email**: [dmitriylapin2001@gmail.com](mailto:dmitriylapin2001@gmail.com)
