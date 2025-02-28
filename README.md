@@ -86,3 +86,27 @@
 
 ![image](https://github.com/user-attachments/assets/4f610f74-9ed1-480c-ba7d-d8ef5607fd9e)
 
+2. Команда вычисления простого целочисленного выражения:
+   ```bash
+   git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
+   ```
+![image](https://github.com/user-attachments/assets/b24c588d-a5ef-4ed0-96cb-cd14844aa9f7)
+
+3. Команда вычисления выражения с плавающей запятой:
+   ```bash
+   git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
+   ```
+![image](https://github.com/user-attachments/assets/80974e6d-69ec-48c4-80d1-2fe352c5930d)
+
+4. Попытка ввести некорректное выражение:
+   ```bash
+   git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
+   ```
+![image](https://github.com/user-attachments/assets/7425b7f5-8e56-4eef-aa04-207fef3f4b7e)
+   ```bash
+   git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
+   ```
+5. Поддержка переменных:
+   
+![image](https://github.com/user-attachments/assets/b00ed333-aed8-4999-9d1e-eff076d872b5)
+
