@@ -82,7 +82,7 @@
 После запуска сервера должно появиться следующее сообщение:
 
    ![image](https://github.com/user-attachments/assets/1f9ccd82-d592-4c6a-b9e6-faa9d6d53fbc)
-)
+
 1. Команда **`echo`**:
    ```bash
    ./Client -c "echo"
