@@ -85,32 +85,32 @@
    ./Client -c "echo"
    ```
 
-![image](https://github.com/user-attachments/assets/4f610f74-9ed1-480c-ba7d-d8ef5607fd9e)
+   ![image](https://github.com/user-attachments/assets/4f610f74-9ed1-480c-ba7d-d8ef5607fd9e)
 
 2. Команда вычисления простого целочисленного выражения:
    ```bash
    ./Client -e "-5*6 + (-7)*2 + 1"
    ```
-![image](https://github.com/user-attachments/assets/b24c588d-a5ef-4ed0-96cb-cd14844aa9f7)
+   ![image](https://github.com/user-attachments/assets/b24c588d-a5ef-4ed0-96cb-cd14844aa9f7)
 
 3. Команда вычисления выражения с плавающей запятой:
    ```bash
    ./Client -e "-5*6 + (-7)*2 + 1.0"
    ```
-![image](https://github.com/user-attachments/assets/80974e6d-69ec-48c4-80d1-2fe352c5930d)
+   ![image](https://github.com/user-attachments/assets/80974e6d-69ec-48c4-80d1-2fe352c5930d)
 
 4. Попытка ввести некорректное выражение:
    ```bash
    ./Client -e "*6 + (-7)*2 + 1.0"
    ```
-![image](https://github.com/user-attachments/assets/7425b7f5-8e56-4eef-aa04-207fef3f4b7e)
+   ![image](https://github.com/user-attachments/assets/7425b7f5-8e56-4eef-aa04-207fef3f4b7e)
 
 5. Поддержка переменных:
    ```bash
    ./Client -e "pi = 3.14"
    ./Client -e "pi"
    ```
-![image](https://github.com/user-attachments/assets/b00ed333-aed8-4999-9d1e-eff076d872b5)
+   ![image](https://github.com/user-attachments/assets/b00ed333-aed8-4999-9d1e-eff076d872b5)
 
 
 6. Поддержка многострочного ввода:
@@ -119,7 +119,7 @@
    s = s * s + 1;\
    s"
    ```
-![image](https://github.com/user-attachments/assets/2db8dc04-87c9-4a1c-83b6-64dc84579ce3)
+   ![image](https://github.com/user-attachments/assets/2db8dc04-87c9-4a1c-83b6-64dc84579ce3)
 
 7. Поддержка API для сброса состояния:
       ```bash
