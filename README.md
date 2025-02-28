@@ -44,4 +44,12 @@
    ![Грамматика](https://github.com/user-attachments/assets/0d143d84-cb44-499f-84cd-0378147d503b)
 
 ---
+## Запуск проекта
+Данный проект собирался и компилировался в системе Ubuntu 24.04 с исполизованием компилятора gcc-12.
+Эти условия выставлены в `Dockerfile`.
 
+### Установка проекта через Docker:
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/dochkavurdalaka/lapin_garda_test.git
+   cd lapin_garda_test```
