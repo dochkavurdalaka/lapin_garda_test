@@ -1,16 +1,17 @@
-# Use Ubuntu 24.04 as the base image
+# Минимальный образ для сборки C++20 проекта
 FROM ubuntu:24.04
 
-LABEL maintainer="Lapin Dmitriy <dmitriylapin2001@gmail.com>"
-COPY . /lapin_garda_test
-
-#-y is for accepting yes when the system asked us for installing the package
+# Только самое необходимое для сборки
 RUN apt-get update && apt-get install -y \
-    curl \
+    g++-13 \
     cmake \
-    gcc-12\
-    ninja-build \
-    build-essential \
+    make \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Настройка компилятора по умолчанию
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-13 100
 
+WORKDIR /workspace
+
+CMD ["/bin/bash"]
