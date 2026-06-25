@@ -1,0 +1,23 @@
+{
+    "name": "lapin_garda_test Dev Container",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": ".."
+    },
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+    },
+    "appPort": [
+        "8080:8080"
+    ],
+    "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake"
+    ],
+    "mounts": [
+        "source=${localWorkspaceFolder},target=/workspace,type=bind"
+    ],
+    "workspaceFolder": "/workspace",
+    "remoteUser": "root"
+}

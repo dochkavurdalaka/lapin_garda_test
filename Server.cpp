@@ -30,11 +30,11 @@ std::string GenerateAnswer(const httplib::Request& req,
             result = "unknown command";
         }
     } else if (msg.contains("exp")) {
-        std::vector<std::string> instructions = std::move(Split(msg["exp"], {";"}));
+        std::vector<std::string> instructions = Split(msg["exp"], {";"});
         try {
             for (size_t i = 0; i < instructions.size(); ++i) {
                 if (instructions[i].find('=') != std::string::npos) {
-                    std::vector<std::string> parts = std::move(Split(instructions[i], {"="}));
+                    std::vector<std::string> parts = Split(instructions[i], {"="});
                     ExamOnInCorrect(parts[1]);
                     database[parts[0]] = EvaluateExpression(parts[1], database);
                     result = "";
@@ -61,13 +61,60 @@ std::string GenerateAnswer(const httplib::Request& req,
     return answer.dump();
 }
 
+int signal_pipe[2];
+
+void SignalHandler(int) {
+    char msg = 1;
+    write(signal_pipe[1], &msg, 1);
+}
+
+int SetUpShutdownHandler() {
+    // Создаем pipe
+    if (pipe(signal_pipe) == -1) {
+        std::cerr << "Failed to create pipe: " << strerror(errno) << std::endl;
+        return 1;
+    }
+
+     // Установка обработчиков сигналов для graceful shutdown через sigaction
+    struct sigaction sa{};
+    // Очищаем маску сигналов
+    sigemptyset(&sa.sa_mask);
+    // Назначаем функцию-обработчик
+    sa.sa_handler = SignalHandler;
+    // Устанавливаем флаги:
+    // SA_RESTART - перезапускать системные вызовы после сигнала
+    // Это важно для poll, read и других вызовов
+    sa.sa_flags = SA_RESTART;
+    // Регистрируем обработчик для SIGINT (Ctrl+C)
+    if (sigaction(SIGINT, &sa, nullptr) == -1) {
+        std::cerr << "Ошибка регистрации обработчика SIGINT: " << strerror(errno) << std::endl;
+        return 1;
+    }
+    // Регистрируем обработчик для SIGTERM (завершение процесса)
+    if (sigaction(SIGTERM, &sa, nullptr) == -1) {
+        std::cerr << "Ошибка регистрации обработчика SIGTERM: " << strerror(errno) << std::endl;
+        return 1;
+    }
+
+    // Регистрируем обработчик для SIGINT (Ctrl+Z)
+    if (sigaction(SIGTSTP, &sa, nullptr) == -1) {
+        std::cerr << "Ошибка регистрации обработчика SIGTSTP: " << strerror(errno) << std::endl;
+        return 1;
+    }
+
+    std::cout << "shutdown handler set up\n";
+    return 0;
+
+}
+
 int main() {
 
-    // Создаем HTTP-сервер
-    httplib::Server svr;
-
+    if (SetUpShutdownHandler() == 1) {
+        return 1;
+    }
+   
     std::unordered_map<std::string, NumberType> database;
-
+    httplib::Server svr;
     svr.Post("/message", [&database](const httplib::Request& req, httplib::Response& res) {
         // Получаем тело запроса (сообщение от клиента)
         res.set_content(GenerateAnswer(req, database), "text/plain");
@@ -77,8 +124,29 @@ int main() {
     });
 
     std::cout << "Server started at http://0.0.0.0:8080\n";
-    svr.listen("0.0.0.0", 8080);
+    std::thread server_thread([&]() {
+        // Здесь listen() блокирует только этот поток
+        svr.listen("0.0.0.0", 8080);
+    });
 
+   // Ожидание сигнала через pipe (блокирующий read)
+    char buf;
+    if (read(signal_pipe[0], &buf, 1) == -1) {
+        if (errno != EINTR) {
+            perror("read");
+        }
+    }
+    
+    // Сигнал получен!
+    std::cout << "Shutdown signal received, stopping server...\n";
+    svr.stop();
+    server_thread.join();
+    
+    // Cleanup
+    close(signal_pipe[0]);
+    close(signal_pipe[1]);
+    
+    std::cout << "Server stopped.\n";
     return 0;
 }
 

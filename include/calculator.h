@@ -88,60 +88,65 @@ private:
     char symbol_;
 };
 
+
+template<typename Op>
+NumberType binary_operation(const NumberType& one, const NumberType& two, Op op) {
+    return std::visit(
+        [&](auto&& a, auto&& b) -> NumberType {
+            using T1 = std::decay_t<decltype(a)>;
+            using T2 = std::decay_t<decltype(b)>;
+            
+            if constexpr (std::is_same_v<T1, int64_t> && std::is_same_v<T2, int64_t>) {
+                return op(a, b);
+            } else {
+                return op(static_cast<double>(a), static_cast<double>(b));
+            }
+        },
+        one, two
+    );
+}
+
+
 NumberType operator*(const NumberType& one, const NumberType& two) {
-    if (std::holds_alternative<int64_t>(one) and std::holds_alternative<int64_t>(two)) {
-        return std::get<int64_t>(one) * std::get<int64_t>(two);
-    } else if (std::holds_alternative<double>(one) and std::holds_alternative<int64_t>(two)) {
-        return std::get<double>(one) * std::get<int64_t>(two);
-    } else if (std::holds_alternative<int64_t>(one) and std::holds_alternative<double>(two)) {
-        return std::get<int64_t>(one) * std::get<double>(two);
-    }
-    return std::get<double>(one) * std::get<double>(two);
+    return binary_operation(one, two, std::multiplies<>());
 }
 
 NumberType operator+(const NumberType& one, const NumberType& two) {
-    if (std::holds_alternative<int64_t>(one) and std::holds_alternative<int64_t>(two)) {
-        return std::get<int64_t>(one) + std::get<int64_t>(two);
-    } else if (std::holds_alternative<double>(one) and std::holds_alternative<int64_t>(two)) {
-        return std::get<double>(one) + std::get<int64_t>(two);
-    } else if (std::holds_alternative<int64_t>(one) and std::holds_alternative<double>(two)) {
-        return std::get<int64_t>(one) + std::get<double>(two);
-    }
-    return std::get<double>(one) + std::get<double>(two);
+    return binary_operation(one, two, std::plus<>());
 }
 
 NumberType operator-(const NumberType& one, const NumberType& two) {
-    if (std::holds_alternative<int64_t>(one) and std::holds_alternative<int64_t>(two)) {
-        return std::get<int64_t>(one) - std::get<int64_t>(two);
-    } else if (std::holds_alternative<double>(one) and std::holds_alternative<int64_t>(two)) {
-        return std::get<double>(one) - std::get<int64_t>(two);
-    } else if (std::holds_alternative<int64_t>(one) and std::holds_alternative<double>(two)) {
-        return std::get<int64_t>(one) - std::get<double>(two);
-    }
-    return std::get<double>(one) - std::get<double>(two);
+    return binary_operation(one, two, std::minus<>());
 }
 
+
 NumberType operator/(const NumberType& one, const NumberType& two) {
-    if (std::holds_alternative<int64_t>(one) and std::holds_alternative<int64_t>(two)) {
-        if(std::get<int64_t>(two) == 0) {
-            throw std::invalid_argument("division on zero is forbidden");
-        }
-        return std::get<int64_t>(one) / std::get<int64_t>(two);
-    } else if (std::holds_alternative<double>(one) and std::holds_alternative<int64_t>(two)) {
-        if(std::get<int64_t>(two) == 0) {
-            throw std::invalid_argument("division on zero is forbidden");
-        }
-        return std::get<double>(one) / std::get<int64_t>(two);
-    } else if (std::holds_alternative<int64_t>(one) and std::holds_alternative<double>(two)) {
-        if(std::get<double>(two) == 0.) {
-            throw std::invalid_argument("division on zero is forbidden");
-        }
-        return std::get<int64_t>(one) / std::get<double>(two);
-    }
-    if(std::get<double>(two) == 0.) {
-        throw std::invalid_argument("division on zero is forbidden");
-    }
-    return std::get<double>(one) / std::get<double>(two);
+    return std::visit(
+        [&](auto&& a, auto&& b) -> NumberType {
+            using T1 = std::decay_t<decltype(a)>;
+            using T2 = std::decay_t<decltype(b)>;
+            
+            // Проверка деления на ноль для всех типов
+            if constexpr (std::is_same_v<T2, int64_t>) {
+                if (b == 0) {
+                    throw std::invalid_argument("division by zero is forbidden");
+                }
+            } else if constexpr (std::is_same_v<T2, double>) {
+                if (b == 0.0) {
+                    throw std::invalid_argument("division by zero is forbidden");
+                }
+            }
+            
+            // Выполнение деления
+            if constexpr (std::is_same_v<T1, int64_t> && std::is_same_v<T2, int64_t>) {
+                return a / b;  // int64_t / int64_t → int64_t
+            } else {
+                // В остальных случаях приводим к double
+                return static_cast<double>(a) / static_cast<double>(b);
+            }
+        },
+        one, two
+    );
 }
 
 class Expression {
